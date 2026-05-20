@@ -1,7 +1,5 @@
-const { createClient } = require('@supabase/supabase-js')
-
 require('dotenv').config()
-
+const { createClient } = require('@supabase/supabase-js')
 
 const supabaseUrl = process.env.SUPABASE_URL
 const supabaseKey = process.env.SUPABASE_KEY
@@ -28,8 +26,6 @@ async function addRide() {
   }
 }
 
-addRide()
-
 async function getRides() {
   const { data, error } = await supabase
     .from('rides')
@@ -40,7 +36,7 @@ async function getRides() {
   } else {
     console.log('All rides:')
     data.forEach(ride => {
-      console.log(`${ride.rider_name}: ${ride.pickup} → ${ride.dropoff} $${ride.base_price}`)
+      console.log(`${ride.rider_name}: ${ride.pickup} to ${ride.dropoff} $${ride.base_price}`)
     })
   }
 }
