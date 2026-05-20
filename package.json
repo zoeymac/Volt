@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/zoeymac/Volt#readme",
   "dependencies": {
-    "@supabase/supabase-js": "^2.106.0"
+    "@supabase/supabase-js": "^2.106.0",
+    "dotenv": "^17.4.2"
   }
 }
