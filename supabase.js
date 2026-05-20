@@ -26,3 +26,20 @@ async function addRide() {
 }
 
 addRide()
+
+async function getRides() {
+  const { data, error } = await supabase
+    .from('rides')
+    .select('*')
+
+  if (error) {
+    console.log('Error:', error.message)
+  } else {
+    console.log('All rides:')
+    data.forEach(ride => {
+      console.log(`${ride.rider_name}: ${ride.pickup} → ${ride.dropoff} $${ride.base_price}`)
+    })
+  }
+}
+
+getRides()
