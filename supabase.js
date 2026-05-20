@@ -3,10 +3,21 @@ const { createClient } = require('@supabase/supabase-js')
 
 const supabaseUrl = process.env.SUPABASE_URL
 const supabaseKey = process.env.SUPABASE_KEY
-
 const supabase = createClient(supabaseUrl, supabaseKey)
 
-async function addRide() {
+async function signInAndAddRide() {
+  const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+    email: 'rider@volt.com',
+    password: 'test1234'
+  })
+
+  if (authError) {
+    console.log('Login error:', authError.message)
+    return
+  }
+
+  console.log('Logged in:', authData.user.email)
+
   const { data, error } = await supabase
     .from('rides')
     .insert([{
@@ -15,30 +26,16 @@ async function addRide() {
       dropoff: 'Etobicoke',
       base_price: 12.00,
       surge_multiplier: 1.5,
-      status: 'completed'
+      status: 'completed',
+      rider_id: authData.user.id
     }])
     .select()
 
   if (error) {
     console.log('Error:', error.message)
   } else {
-    console.log('Ride added:', data)
+    console.log('Ride added with user ID:', data[0].rider_id)
   }
 }
 
-async function getRides() {
-  const { data, error } = await supabase
-    .from('rides')
-    .select('*')
-
-  if (error) {
-    console.log('Error:', error.message)
-  } else {
-    console.log('All rides:')
-    data.forEach(ride => {
-      console.log(`${ride.rider_name}: ${ride.pickup} to ${ride.dropoff} $${ride.base_price}`)
-    })
-  }
-}
-
-getRides()
+signInAndAddRide()
